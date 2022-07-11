@@ -14,7 +14,7 @@ class MainUI(QMainWindow):
         super(MainUI, self).__init__()
         loadUi("autoscout24.ui", self)
         
-        city = 'Amsterdam'
+        city = self.provincelabel.text()
         self.city.setText(weather.location(city))
         self.date.setText(weather.date(city))      
         self.date1.setText(weather.date1(city))

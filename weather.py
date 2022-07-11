@@ -124,5 +124,3 @@ def icon_url2(city):
 
 
 
-print(icon_url('Amsterdam'))
-
