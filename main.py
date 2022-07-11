@@ -13,8 +13,8 @@ class MainUI(QMainWindow):
     def __init__(self):
         super(MainUI, self).__init__()
         loadUi("autoscout24.ui", self)
-        
-        city = 'Amsterdam'
+        city = self.Action()
+        print(city)
         self.city.setText(weather.location(city))
         self.date.setText(weather.date(city))      
         self.date1.setText(weather.date1(city))
@@ -73,24 +73,26 @@ class MainUI(QMainWindow):
         user = 'postgres',password = '12345')
         cur = conn.cursor()
 
-        index=(self.tableWid.selectionModel().currentIndex())
-        value=index.row()+1
+        indx=(self.tableWid.selectionModel().currentIndex())
+        self.value=indx.row()+1
 
-        cur.execute("select brand_model,plate,km,year,price,province,image from cars where id = %s;",(value,))
-        car = cur.fetchall()
-        for c in car:
+        cur.execute("select brand_model,plate,km,year,price,province,image from cars where id = %s;",(self.value,))
+        self.car = cur.fetchall()
+        for self.c in self.car:
             self.modellabel.clear()
-            self.modellabel.insert(c[0])
+            self.modellabel.insert(self.c[0])
             self.kmlabel.clear()
-            self.kmlabel.insert(c[2])
+            self.kmlabel.insert(self.c[2])
             self.pricelabel.clear()
-            self.pricelabel.insert(c[4])
+            self.pricelabel.insert(self.c[4])
             self.yearlabel.clear()
-            self.yearlabel.insert(c[3])
+            self.yearlabel.insert(self.c[3])
             self.provincelabel.clear()
-            self.provincelabel.insert(c[5])
+            self.provincelabel.insert(self.c[5])
             self.platelabel.clear()
-            self.platelabel.insert(c[1])
+            self.platelabel.insert(self.c[1])
+            
+        return self.c
             
 
         conn.commit()
@@ -102,11 +104,7 @@ class MainUI(QMainWindow):
 
     
         
-        
-        
-        
-        
-        
+    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
