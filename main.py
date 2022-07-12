@@ -14,8 +14,10 @@ class MainUI(QMainWindow):
     def __init__(self):
         super(MainUI, self).__init__()
         loadUi("autoscout24.ui", self)
-        city = self.Action()
-        print(city)
+
+        
+        city = self.provincelabel.text()
+
         self.city.setText(weather.location(city))
         self.date.setText(weather.date(city))      
         self.date1.setText(weather.date1(city))
@@ -96,8 +98,7 @@ class MainUI(QMainWindow):
             self.provincelabel.insert(self.c[5])
             self.platelabel.clear()
             self.platelabel.insert(self.c[1])
-            
-        return self.c
+          
             
 
         conn.commit()
