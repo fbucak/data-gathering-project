@@ -1,5 +1,6 @@
 import weather
 import requests
+import autoSelenium
 import json
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.uic import loadUi
@@ -33,8 +34,8 @@ class MainUI(QMainWindow):
         self.condition.setText(weather.condition(city))
         self.condition1.setText(weather.condition1(city))
         self.condition2.setText(weather.condition2(city))
-        
-        
+
+
         
         
         image = QImage()
@@ -45,9 +46,13 @@ class MainUI(QMainWindow):
         image.loadFromData(requests.get(str(weather.icon_url2(city))).content)
         self.icon2.setPixmap(QPixmap(image))
 
+# ***********************
+        self.search_pushButton.clicked.connect(self.autoSelennium)
+
+
     def start(self):
              
-            conn = psycopg2.connect(host= 'localhost',database = 'Autoscout24',user = 'postgres',password = '12345')
+            conn = psycopg2.connect(host= 'localhost',database = 'Autoscout24',user = 'postgres',password = '981')
             cur = conn.cursor()
             
 
@@ -70,7 +75,7 @@ class MainUI(QMainWindow):
     def Action(self):
         conn= psycopg2.connect(host= 'localhost',
         database = 'Autoscout24',
-        user = 'postgres',password = '12345')
+        user = 'postgres',password = '981')
         cur = conn.cursor()
 
         index=(self.tableWid.selectionModel().currentIndex())
@@ -95,6 +100,13 @@ class MainUI(QMainWindow):
 
         conn.commit()
 
+    def plakaSearch(self,plaka):
+        self.plaka=plaka
+        self.search_pushButton.setText(self.plaka)
+    
+    def autoSelennium(self):
+        self.plaka=self.platelabel.text()
+        autoSelenium.plakaSelenium(self.plaka)
 
 
         
