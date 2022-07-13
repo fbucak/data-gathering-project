@@ -31,7 +31,7 @@ class MainUI(QMainWindow):
 
     def start(self):
              
-            conn = psycopg2.connect(host= 'localhost',database = 'Autoscout24',user = 'postgres',password = '12345')
+            conn = psycopg2.connect(host= 'localhost',database = 'Autoscout24',user = 'postgres',password = '981')
             cur = conn.cursor()
             
 
@@ -54,7 +54,7 @@ class MainUI(QMainWindow):
     def Action(self):
         conn= psycopg2.connect(host= 'localhost',
         database = 'Autoscout24',
-        user = 'postgres',password = '12345')
+        user = 'postgres',password = '981')
         cur = conn.cursor()
 
         indx=(self.tableWid.selectionModel().currentIndex())
