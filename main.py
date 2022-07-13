@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.uic import loadUi
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPixmap, QImage
+from PyQt5 import QtCore
 import sys
 import os
 import psycopg2
@@ -15,38 +16,14 @@ class MainUI(QMainWindow):
         super(MainUI, self).__init__()
         loadUi("autoscout24.ui", self)
 
-        
-        city = self.provincelabel.text()
 
-        self.city.setText(weather.location(city))
-        self.date.setText(weather.date(city))      
-        self.date1.setText(weather.date1(city))
-        self.date2.setText(weather.date2(city))
+        
         self.start_button.clicked.connect(self.start)
         self.tableWid.setColumnWidth(0,380)
         self.tableWid.clicked.connect(self.Action)
                     
-        self.minTemp.setText(weather.min_temp(city))
-        self.minTemp1.setText(weather.min_temp1(city))
-        self.minTemp2.setText(weather.min_temp2(city))
-        self.maxTemp.setText(weather.max_temp(city))
-        self.maxTemp1.setText(weather.max_temp1(city))
-        self.maxTemp2.setText(weather.max_temp2(city))
         
-        self.condition.setText(weather.condition(city))
-        self.condition1.setText(weather.condition1(city))
-        self.condition2.setText(weather.condition2(city))
 
-
-        
-        
-        image = QImage()
-        image.loadFromData(requests.get(str(weather.icon_url(city))).content)
-        self.icon.setPixmap(QPixmap(image))
-        image.loadFromData(requests.get(str(weather.icon_url1(city))).content)
-        self.icon1.setPixmap(QPixmap(image))
-        image.loadFromData(requests.get(str(weather.icon_url2(city))).content)
-        self.icon2.setPixmap(QPixmap(image))
 
 # ***********************
         self.search_pushButton.clicked.connect(self.autoSelennium)
@@ -54,7 +31,7 @@ class MainUI(QMainWindow):
 
     def start(self):
              
-            conn = psycopg2.connect(host= 'localhost',database = 'Autoscout24',user = 'postgres',password = '981')
+            conn = psycopg2.connect(host= 'localhost',database = 'Autoscout24',user = 'postgres',password = '12345')
             cur = conn.cursor()
             
 
@@ -77,7 +54,7 @@ class MainUI(QMainWindow):
     def Action(self):
         conn= psycopg2.connect(host= 'localhost',
         database = 'Autoscout24',
-        user = 'postgres',password = '981')
+        user = 'postgres',password = '12345')
         cur = conn.cursor()
 
         indx=(self.tableWid.selectionModel().currentIndex())
@@ -98,10 +75,42 @@ class MainUI(QMainWindow):
             self.provincelabel.insert(self.c[5])
             self.platelabel.clear()
             self.platelabel.insert(self.c[1])
+            image=QImage()
+            image.loadFromData(requests.get(self.c[6]).content)
+            image1 = image.scaled(800, 800, QtCore.Qt.KeepAspectRatio)
+            self.label.setPixmap(QPixmap(image1))
+            self.weatherCondition(self.c[5])
           
             
 
         conn.commit()
+    def weatherCondition(self,city):
+        
+        self.city.setText(weather.location(city))
+        self.date.setText(weather.date(city))      
+        self.date1.setText(weather.date1(city))
+        self.date2.setText(weather.date2(city))
+        self.minTemp.setText(weather.min_temp(city))
+        self.minTemp1.setText(weather.min_temp1(city))
+        self.minTemp2.setText(weather.min_temp2(city))
+        self.maxTemp.setText(weather.max_temp(city))
+        self.maxTemp1.setText(weather.max_temp1(city))
+        self.maxTemp2.setText(weather.max_temp2(city))
+        
+        self.condition.setText(weather.condition(city))
+        self.condition1.setText(weather.condition1(city))
+        self.condition2.setText(weather.condition2(city))
+
+
+        
+        
+        image = QImage()
+        image.loadFromData(requests.get(str(weather.icon_url(city))).content)
+        self.icon.setPixmap(QPixmap(image))
+        image.loadFromData(requests.get(str(weather.icon_url1(city))).content)
+        self.icon1.setPixmap(QPixmap(image))
+        image.loadFromData(requests.get(str(weather.icon_url2(city))).content)
+        self.icon2.setPixmap(QPixmap(image))
 
     def plakaSearch(self,plaka):
         self.plaka=plaka
